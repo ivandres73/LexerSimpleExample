@@ -3,7 +3,7 @@
 Lexer::Lexer()
 {
     curr_st = 0;
-    x = "==\n";
+    x = "//soypijadeloco\n9.9";
     i = 0;
 }
 
@@ -49,7 +49,7 @@ Token Lexer::getToken()
 					curr_st = 17;
 				else if (c == '!')
 					curr_st = 19;
-				else if (c == '\\')
+				else if (c == '/')
 					curr_st = 21;
 			break;
 			case 1:
@@ -114,7 +114,31 @@ Token Lexer::getToken()
 				break;
 			case 20:
 				return returnToken(Token::different);
-
+			case 21:
+				if (c == '/')
+					curr_st = 22;
+				else if (c == '*')
+					curr_st = 23;
+				break;
+			case 22:
+				if (c == '\n')
+					curr_st = 0;
+				else
+					continue;
+				break;
+			case 23:
+				if (c == '*')
+					curr_st = 24;
+				else
+					continue;
+			case 24:
+				if (c == '*')
+					continue;
+				else if (c == '/')
+					curr_st = 0;
+				else
+					curr_st = 23;
+				break;
     	}
     	cout << "state: " << curr_st << endl;
     	cout << "-------------------------" << endl;
