@@ -62,7 +62,6 @@ Token Lexer::getToken()
 				break;
 			case 2:
 				return returnToken(Token::int_const);
-				break;
 			case 3:
 				if (isDigit(c))
 					continue;
@@ -71,19 +70,14 @@ Token Lexer::getToken()
 				break;
 			case 4:
 				return returnToken(Token::float_const);
-				break;
 			case 5:
 				return returnToken(Token::add);
-				break;
 			case 6:
 				return returnToken(Token::sub);
-				break;
 			case 7:
 				return returnToken(Token::multi);
-				break;
 			case 8:
 				return returnToken(Token::divi);
-				break;
 			case 9:
 				if (c == '=')
 					curr_st = 11;
@@ -92,11 +86,34 @@ Token Lexer::getToken()
 				break;
 			case 10:
 				return returnToken(Token::greater_than);
-				break;
 			case 11:
 				return returnToken(Token::greater_equal);
+			case 12:
+				if (c == '=')
+					curr_st = 14;
+				else
+					curr_st = 13;
 				break;
-
+			case 13:
+				return returnToken(Token::lesser_than);
+			case 14:
+				return returnToken(Token::lesser_equal);
+			case 15:
+				return returnToken(Token::open_parens);
+			case 16:
+				return returnToken(Token::close_parens);
+			case 17:
+				if (c == '=')
+					curr_st = 18;
+				break;
+			case 18:
+				return returnToken(Token::is_equal);
+			case 19:
+				if (c == '=')
+					curr_st = 20;
+				break;
+			case 20:
+				return returnToken(Token::different);
 
     	}
     	cout << "state: " << curr_st << endl;
