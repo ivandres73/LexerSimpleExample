@@ -3,40 +3,45 @@
 Lexer::Lexer()
 {
     curr_st = 0;
-    x = "//soypijadeloco\n9.9";
-    i = 0;
+    line = -1;
+    //file = fstream("exampleFile.txt", fstream::in);
 }
 
-char Lexer::nextChar()
+void Lexer::nextChar()
 {
-
-    return x[i++];
+    file.get(c);
 }
 
 Token Lexer::getToken()
 {
-	char c;
+	file.open("exampleFile.txt", fstream::in);
+	resetCurrentState();
+
 	while (true)
 	{
-		c = nextChar();
+		nextChar();
 		cout << "c is " << c << endl;
+
+		/*if (file.eof())
+			return returnToken(Token::end_file);*/
+
     	switch(curr_st)
     	{
 			case 0:
-				if (c == '\t' || c == ' ' || c == '\n')
+				if (c == '\n')
+					line++;
+				else if (c == '\t' || c == ' ')
 					continue;
-				else if (isDigit(c)) {
+				else if (isDigit(c))
 					curr_st = 1;
-
-				}
 				else if (c == '+')
 					curr_st = 5;
 				else if (c == '-')
 					curr_st = 6;
 				else if (c == '*')
 					curr_st = 7;
-				else if (c == '/')
-					curr_st = 8;
+				// else if (c == '/')
+				// 	curr_st = 8;
 				else if (c == '>')
 					curr_st = 9;
 				else if (c == '<')
@@ -51,7 +56,7 @@ Token Lexer::getToken()
 					curr_st = 19;
 				else if (c == '/')
 					curr_st = 21;
-			break;
+				break;
 			case 1:
 				if (isDigit(c))
 					continue;
@@ -119,6 +124,8 @@ Token Lexer::getToken()
 					curr_st = 22;
 				else if (c == '*')
 					curr_st = 23;
+				else
+					curr_st = 8;
 				break;
 			case 22:
 				if (c == '\n')
@@ -142,9 +149,8 @@ Token Lexer::getToken()
     	}
     	cout << "state: " << curr_st << endl;
     	cout << "-------------------------" << endl;
+    	cout << "file posi: " << file.tellg() << endl;
 	}
-
-	resetCurrentState();
 }
 
 void Lexer::resetCurrentState() { curr_st = 0; }
@@ -167,5 +173,7 @@ Token Lexer::returnToken(Token t)
 
 void Lexer::previousChar()
 {
-	//return 1 pos the input;
+	int new_pos = file.tellg();
+	new_pos--;
+	file.seekg(new_pos ,file.beg);
 }

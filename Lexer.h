@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string.h>
+#include <fstream>
 
 enum class Token {
     int_const,
@@ -15,23 +15,27 @@ enum class Token {
     lesser_than,
     lesser_equal,
     is_equal,
-    different
+    different,
+    end_file
 };
 
 using std::cout;
 using std::endl;
+using std::fstream;
 
 class Lexer {
     public:
         Lexer();
         Token getToken();
-        std::string x;
-        int i;
+        fstream file;
         
     private:
         int curr_st;
+        int line;
+        int file_pos;
+        char c;//current char of the file
 
-        char nextChar();
+        void nextChar();
         void resetCurrentState();
         bool isDigit(char c);
         Token returnToken(Token t);

@@ -5,3 +5,5 @@ Simple Automata that identifies:
 - Comparing operators
 - arithmetic operators
 - comments (block and single lined)
+
+The .jff file contain the Automaton I made for this example, you can see it using JFLAP.

@@ -46,6 +46,9 @@ std::ostream& operator <<(std::ostream& out, const Token& t)
 		case 13:
 			out << "different";
 			break;
+		case 14:
+			cout << "end_file";
+			break;
 		default:
 			out << "Type not found (mismatch)";
 	}
@@ -55,7 +58,10 @@ std::ostream& operator <<(std::ostream& out, const Token& t)
 int main() {
     Lexer lex = Lexer();
 
-    //std::cout << lex.isDigit('.') << lex.isDigit('\\') << lex.isDigit('c') << lex.isDigit('9');
-    cout << lex.getToken();
+    while ( !lex.file.eof() )
+    {
+    	cout << lex.getToken();
+    	cout << endl;
+    }
     return 0;
 }
