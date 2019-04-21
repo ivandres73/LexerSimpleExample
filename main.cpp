@@ -57,11 +57,16 @@ std::ostream& operator <<(std::ostream& out, const Token& t)
 
 int main() {
     Lexer lex = Lexer();
+    lex.openFile();
 
-    while ( !lex.file.eof() )
+    do
     {
     	cout << lex.getToken();
     	cout << endl;
-    }
+
+    	
+    } while (!lex.isEOF());
+
+    lex.closeFile();
     return 0;
 }

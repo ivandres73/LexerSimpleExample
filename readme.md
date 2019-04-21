@@ -1,4 +1,4 @@
-Simple Automata that identifies:
+# Simple Automata that identifies:
 - Integers constants
 - Float constants
 - Parenthesization
@@ -6,4 +6,4 @@ Simple Automata that identifies:
 - arithmetic operators
 - comments (block and single lined)
 
-The .jff file contain the Automaton I made for this example, you can see it using JFLAP.
+_The .jff file contains the Automaton I made for this example, you can see it using JFLAP._

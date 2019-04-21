@@ -9,26 +9,25 @@ Lexer::Lexer()
 
 void Lexer::nextChar()
 {
-    file.get(c);
+    c = file.get();
 }
 
 Token Lexer::getToken()
 {
-	file.open("exampleFile.txt", fstream::in);
 	resetCurrentState();
 
 	while (true)
 	{
 		nextChar();
-		cout << "c is " << c << endl;
-
-		/*if (file.eof())
-			return returnToken(Token::end_file);*/
+		// cout << "state: " << curr_st << endl;
+		// cout << "c is " << c << endl;
 
     	switch(curr_st)
     	{
 			case 0:
-				if (c == '\n')
+				if (file.eof())
+					return returnToken(Token::end_file);
+				else if (c == '\n')
 					line++;
 				else if (c == '\t' || c == ' ')
 					continue;
@@ -40,8 +39,6 @@ Token Lexer::getToken()
 					curr_st = 6;
 				else if (c == '*')
 					curr_st = 7;
-				// else if (c == '/')
-				// 	curr_st = 8;
 				else if (c == '>')
 					curr_st = 9;
 				else if (c == '<')
@@ -62,6 +59,8 @@ Token Lexer::getToken()
 					continue;
 				else if (c == '.')
 					curr_st = 3;
+				else if (file.eof())
+					curr_st = 2;
 				else
 					curr_st = 2;
 				break;
@@ -70,6 +69,8 @@ Token Lexer::getToken()
 			case 3:
 				if (isDigit(c))
 					continue;
+				else if (file.eof())
+					curr_st = 4;
 				else
 					curr_st = 4;
 				break;
@@ -86,6 +87,8 @@ Token Lexer::getToken()
 			case 9:
 				if (c == '=')
 					curr_st = 11;
+				else if (file.eof())
+					curr_st = 10;
 				else
 					curr_st = 10;
 				break;
@@ -96,6 +99,8 @@ Token Lexer::getToken()
 			case 12:
 				if (c == '=')
 					curr_st = 14;
+				else if (file.eof())
+					curr_st = 13;
 				else
 					curr_st = 13;
 				break;
@@ -124,18 +129,24 @@ Token Lexer::getToken()
 					curr_st = 22;
 				else if (c == '*')
 					curr_st = 23;
+				else if (file.eof())
+					curr_st = 8;
 				else
 					curr_st = 8;
 				break;
 			case 22:
 				if (c == '\n')
 					curr_st = 0;
+				else if (file.eof())
+					continue;
 				else
 					continue;
 				break;
 			case 23:
 				if (c == '*')
 					curr_st = 24;
+				else if (file.eof())
+					continue;
 				else
 					continue;
 			case 24:
@@ -143,13 +154,14 @@ Token Lexer::getToken()
 					continue;
 				else if (c == '/')
 					curr_st = 0;
+				else if (file.eof())
+					curr_st = 23;
 				else
 					curr_st = 23;
 				break;
     	}
-    	cout << "state: " << curr_st << endl;
-    	cout << "-------------------------" << endl;
-    	cout << "file posi: " << file.tellg() << endl;
+    	// cout << "file posi: " << file.tellp() << endl;
+    	// cout << "-------------------------" << endl;
 	}
 }
 
@@ -173,7 +185,13 @@ Token Lexer::returnToken(Token t)
 
 void Lexer::previousChar()
 {
-	int new_pos = file.tellg();
+	int new_pos = file.tellp();
 	new_pos--;
-	file.seekg(new_pos ,file.beg);
+	file.seekp(new_pos, file.beg);
 }
+
+bool Lexer::isEOF() { return file.eof(); }
+
+void Lexer::closeFile() { file.close(); }
+
+void Lexer::openFile() { file.open("exampleFile.txt", fstream::in); }

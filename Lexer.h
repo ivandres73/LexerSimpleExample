@@ -27,12 +27,15 @@ class Lexer {
     public:
         Lexer();
         Token getToken();
-        fstream file;
+        bool isEOF();
+        void closeFile();
+        void openFile();
         
     private:
         int curr_st;
         int line;
         int file_pos;
+        fstream file;
         char c;//current char of the file
 
         void nextChar();
