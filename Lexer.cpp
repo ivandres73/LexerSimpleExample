@@ -4,7 +4,7 @@ Lexer::Lexer()
 {
     curr_st = 0;
     line = -1;
-    //file = fstream("exampleFile.txt", fstream::in);
+    lexeme = "";
 }
 
 void Lexer::nextChar()
@@ -15,11 +15,12 @@ void Lexer::nextChar()
 Token Lexer::getToken()
 {
 	resetCurrentState();
+	emptyLexeme();
 	while (true)
 	{
 		nextChar();
-		 cout << " -> q" << curr_st;
-		 cout << "[" << c << "]";
+		cout << " -> q" << curr_st;
+		cout << "[" << c << "]";
 
     	switch(curr_st)
     	{
@@ -29,7 +30,7 @@ Token Lexer::getToken()
 				else if (c == '\n')
 					line++;
 				else if (c == '\t' || c == ' ')
-					continue;
+					curr_st = 0;
 				else if (isDigit(c))
 					curr_st = 1;
 				else if (c == '+')
@@ -55,7 +56,7 @@ Token Lexer::getToken()
 				break;
 			case 1:
 				if (isDigit(c))
-					continue;
+					curr_st = 1;
 				else if (c == '.')
 					curr_st = 3;
 				else if (file.eof())
@@ -67,7 +68,7 @@ Token Lexer::getToken()
 				return returnToken(Token::int_const);
 			case 3:
 				if (isDigit(c))
-					continue;
+					curr_st = 3;
 				else if (file.eof())
 					curr_st = 4;
 				else
@@ -137,20 +138,20 @@ Token Lexer::getToken()
 				if (c == '\n')
 					curr_st = 0;
 				else if (file.eof())
-					continue;
+					curr_st = 22;
 				else
-					continue;
+					curr_st = 22;
 				break;
 			case 23:
 				if (c == '*')
 					curr_st = 24;
 				else if (file.eof())
-					continue;
+					curr_st = 23;
 				else
-					continue;
+					curr_st = 23;
 			case 24:
 				if (c == '*')
-					continue;
+					curr_st = 24;
 				else if (c == '/')
 					curr_st = 0;
 				else if (file.eof())
@@ -159,6 +160,7 @@ Token Lexer::getToken()
 					curr_st = 23;
 				break;
     	}
+    	lexeme += c;
 	}
 }
 
@@ -173,6 +175,10 @@ bool Lexer::isDigit(char c)
 	}
 	return false;
 }
+
+void Lexer::emptyLexeme() { lexeme = ""; }
+
+string Lexer::getCurrentLexeme() { return lexeme; }
 
 Token Lexer::returnToken(Token t)
 {

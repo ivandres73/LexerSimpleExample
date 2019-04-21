@@ -2,7 +2,7 @@
 
 std::ostream& operator <<(std::ostream& out, const Token& t)
 {
-	switch (int(t))
+	switch (static_cast<int>(t))
 	{
 		case 0:
 			out << "int_const";
@@ -61,7 +61,7 @@ int main() {
 
     do
     {
-    	cout << lex.getToken();
+    	cout << lex.getToken() << ":" << lex.getCurrentLexeme();
     	cout << endl;
 
     	

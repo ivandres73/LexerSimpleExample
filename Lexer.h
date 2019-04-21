@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 enum class Token {
     int_const,
@@ -22,6 +23,7 @@ enum class Token {
 using std::cout;
 using std::endl;
 using std::fstream;
+using std::string;
 
 class Lexer {
     public:
@@ -30,6 +32,7 @@ class Lexer {
         bool isEOF();
         void closeFile();
         void openFile();
+        string getCurrentLexeme();
         
     private:
         int curr_st;
@@ -37,11 +40,12 @@ class Lexer {
         int file_pos;
         fstream file;
         char c;//current char of the file
+        string lexeme;
 
         void nextChar();
         void resetCurrentState();
         bool isDigit(char c);
         Token returnToken(Token t);
         void previousChar();
-
+        void emptyLexeme();
 };
