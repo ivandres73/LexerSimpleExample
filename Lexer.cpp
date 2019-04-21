@@ -15,12 +15,11 @@ void Lexer::nextChar()
 Token Lexer::getToken()
 {
 	resetCurrentState();
-
 	while (true)
 	{
 		nextChar();
-		// cout << "state: " << curr_st << endl;
-		// cout << "c is " << c << endl;
+		 cout << " -> q" << curr_st;
+		 cout << "[" << c << "]";
 
     	switch(curr_st)
     	{
@@ -160,8 +159,6 @@ Token Lexer::getToken()
 					curr_st = 23;
 				break;
     	}
-    	// cout << "file posi: " << file.tellp() << endl;
-    	// cout << "-------------------------" << endl;
 	}
 }
 
