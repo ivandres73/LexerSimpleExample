@@ -135,9 +135,11 @@ Token Lexer::getToken()
 			case 21:
 				if (c == '/') {
 					curr_st = 22;
+					lexeme = "";
 					continue;
 				} else if (c == '*') {
 					curr_st = 23;
+					lexeme = "";
 					continue;
 				} else if (file.eof())
 					return returnToken(Token::divi);
