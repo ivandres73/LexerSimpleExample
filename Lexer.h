@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+//#include <stdexcept>
 
 enum class Token {
     int_const,
@@ -33,6 +34,7 @@ class Lexer {
         void closeFile();
         void openFile();
         string getCurrentLexeme();
+        int getLine();
         
     private:
         int curr_st;

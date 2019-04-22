@@ -35,6 +35,12 @@
 *.cmake
 *.txt
 
+#compile and building files
 Makefile
-
 /CMakeFiles
+
+#Visual Studio files
+.vscode/
+
+#Executable
+Lex

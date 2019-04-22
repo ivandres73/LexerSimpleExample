@@ -3,7 +3,7 @@
 Lexer::Lexer()
 {
     curr_st = 0;
-    line = -1;
+    line = 1;
     lexeme = "";
 }
 
@@ -19,18 +19,20 @@ Token Lexer::getToken()
 	while (true)
 	{
 		nextChar();
-		cout << " -> q" << curr_st;
-		cout << "[" << c << "]";
+		/*cout << " -> q" << curr_st;
+		cout << "[" << c << "]";*/
 
     	switch(curr_st)
     	{
 			case 0:
 				if (file.eof())
 					return returnToken(Token::end_file);
-				else if (c == '\n')
+				if (c == '\n') {
 					line++;
+					continue;	
+				}
 				else if (c == '\t' || c == ' ')
-					curr_st = 0;
+					continue;
 				else if (isDigit(c))
 					curr_st = 1;
 				else if (c == '+')
@@ -53,6 +55,8 @@ Token Lexer::getToken()
 					curr_st = 19;
 				else if (c == '/')
 					curr_st = 21;
+				else
+					throw "invalid symbol";
 				break;
 			case 1:
 				if (isDigit(c))
@@ -60,52 +64,52 @@ Token Lexer::getToken()
 				else if (c == '.')
 					curr_st = 3;
 				else if (file.eof())
-					curr_st = 2;
+					return returnToken(Token::int_const);
 				else
-					curr_st = 2;
+					return returnToken(Token::int_const);
 				break;
-			case 2:
-				return returnToken(Token::int_const);
+			/*case 2:
+				return returnToken(Token::int_const);*/
 			case 3:
 				if (isDigit(c))
 					curr_st = 3;
 				else if (file.eof())
-					curr_st = 4;
+					return returnToken(Token::float_const);
 				else
-					curr_st = 4;
+					return returnToken(Token::float_const);
 				break;
-			case 4:
-				return returnToken(Token::float_const);
+			/*case 4:
+				return returnToken(Token::float_const);*/
 			case 5:
 				return returnToken(Token::add);
 			case 6:
 				return returnToken(Token::sub);
 			case 7:
 				return returnToken(Token::multi);
-			case 8:
-				return returnToken(Token::divi);
+			/*case 8:
+				return returnToken(Token::divi);*/
 			case 9:
 				if (c == '=')
 					curr_st = 11;
 				else if (file.eof())
-					curr_st = 10;
+					return returnToken(Token::greater_than);
 				else
-					curr_st = 10;
+					return returnToken(Token::greater_than);
 				break;
-			case 10:
-				return returnToken(Token::greater_than);
+			/*case 10:
+				return returnToken(Token::greater_than);*/
 			case 11:
 				return returnToken(Token::greater_equal);
 			case 12:
 				if (c == '=')
 					curr_st = 14;
 				else if (file.eof())
-					curr_st = 13;
+					return returnToken(Token::lesser_equal);
 				else
-					curr_st = 13;
+					return returnToken(Token::lesser_equal);
 				break;
-			case 13:
-				return returnToken(Token::lesser_than);
+			/*case 13:
+				return returnToken(Token::lesser_than);*/
 			case 14:
 				return returnToken(Token::lesser_equal);
 			case 15:
@@ -115,47 +119,56 @@ Token Lexer::getToken()
 			case 17:
 				if (c == '=')
 					curr_st = 18;
+				else
+					throw "invalid symbol";
 				break;
 			case 18:
 				return returnToken(Token::is_equal);
 			case 19:
 				if (c == '=')
 					curr_st = 20;
+				else
+					throw "invalid symbol";
 				break;
 			case 20:
 				return returnToken(Token::different);
 			case 21:
-				if (c == '/')
+				if (c == '/') {
 					curr_st = 22;
-				else if (c == '*')
+					continue;
+				} else if (c == '*') {
 					curr_st = 23;
-				else if (file.eof())
-					curr_st = 8;
+					continue;
+				} else if (file.eof())
+					return returnToken(Token::divi);
 				else
-					curr_st = 8;
+					return returnToken(Token::divi);
 				break;
 			case 22:
-				if (c == '\n')
+				if (c == '\n') {
 					curr_st = 0;
-				else if (file.eof())
-					curr_st = 22;
+					continue;
+				} else if (file.eof())
+					return returnToken(Token::end_file);
 				else
-					curr_st = 22;
+					continue;
 				break;
 			case 23:
-				if (c == '*')
+				if (c == '*') {
 					curr_st = 24;
-				else if (file.eof())
-					curr_st = 23;
+					continue;
+				} else if (file.eof())
+					return returnToken(Token::end_file);
 				else
-					curr_st = 23;
+					continue;
 			case 24:
 				if (c == '*')
-					curr_st = 24;
-				else if (c == '/')
+					continue;
+				else if (c == '/') {
 					curr_st = 0;
-				else if (file.eof())
-					curr_st = 23;
+					continue;
+				} else if (file.eof())
+					return returnToken(Token::end_file);
 				else
 					curr_st = 23;
 				break;
@@ -198,3 +211,5 @@ bool Lexer::isEOF() { return file.eof(); }
 void Lexer::closeFile() { file.close(); }
 
 void Lexer::openFile() { file.open("exampleFile.txt", fstream::in); }
+
+int Lexer::getLine() { return line; }

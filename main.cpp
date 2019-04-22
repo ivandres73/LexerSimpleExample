@@ -59,13 +59,18 @@ int main() {
     Lexer lex = Lexer();
     lex.openFile();
 
-    do
-    {
-    	cout << lex.getToken() << ":" << lex.getCurrentLexeme();
-    	cout << endl;
-
-    	
-    } while (!lex.isEOF());
+	do
+	{
+		try
+		{
+			cout << lex.getToken() << ":" << lex.getCurrentLexeme();
+			cout << endl;
+		} catch (const char* e)
+		{
+			std::cerr << e << " at line: " << lex.getLine();
+			cout << endl;
+		}
+	} while (!lex.isEOF());
 
     lex.closeFile();
     return 0;
