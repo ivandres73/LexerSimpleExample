@@ -203,9 +203,7 @@ Token Lexer::returnToken(Token t)
 
 void Lexer::previousChar()
 {
-	int new_pos = file.tellp();
-	new_pos--;
-	file.seekp(new_pos, file.beg);
+	file.unget();
 }
 
 bool Lexer::isEOF() { return file.eof(); }
